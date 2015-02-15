@@ -1,0 +1,31 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'maven'
+
+repositories 
+{
+    mavenLocal()
+    mavenCentral()
+}
+
+allprojects {
+    group = "com.eric.ndim"
+}
+
+dependencies {
+
+	compile 'com.eric.util:common:0.0.1'
+
+	compile 'org.springframework:spring-web:4.0.2.RELEASE'
+	compile 'org.springframework:spring-webmvc:4.0.2.RELEASE'
+	compile 'org.springframework:spring-context:3.2.0.RELEASE'
+	compile 'org.springframework:spring-core:4.0.2.RELEASE'
+	compile 'org.springframework:spring-context-support:4.0.2.RELEASE'
+	compile 'org.springframework:spring-beans:4.0.2.RELEASE'
+
+	compile 'org.freemarker:freemarker:2.3.20'
+
+	compile 'org.mongodb:mongo-java-driver:2.9.1'
+	
+	testCompile 'junit:junit:4.11'
+}
