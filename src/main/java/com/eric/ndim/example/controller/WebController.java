@@ -1,6 +1,9 @@
 package com.eric.ndim.example.controller;
 
+import com.eric.ndim.domain.DB;
+import com.eric.ndim.domain.NamedDimensions;
 import com.eric.ndim.example.domain.Item;
+import com.eric.ndim.example.domain.ItemFactory;
 import com.eric.ndim.example.repository.ItemRepository;
 import com.eric.util.wrapper.ByteArrayWrapper;
 import org.bson.types.ObjectId;
@@ -18,8 +21,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.eric.ndim.example.DBContext.getDB;
-import static com.eric.ndim.example.DBContext.getDimensionNumber;
 
 /**
  * 
@@ -29,40 +30,49 @@ import static com.eric.ndim.example.DBContext.getDimensionNumber;
 @Controller
 public class WebController
 {
-	private ItemRepository repository;
-	
+	private final ItemRepository repository;
+	private final DB nDimsDb;
+	private final ItemFactory itemFactory;
+	private final NamedDimensions namedDimensions;
+
 	@Autowired
-	public WebController(final ItemRepository repository)
+	public WebController(final ItemRepository repository,
+						 final DB nDimsDb,
+						 final ItemFactory itemFactory,
+						 final NamedDimensions namedDimensions)
 	{
 		this.repository = repository;
+		this.nDimsDb = nDimsDb;
+		this.itemFactory = itemFactory;
+		this.namedDimensions = namedDimensions;
 	}
 	
 	@RequestMapping(value="/createPerson", method=RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public void createPerson(@RequestParam("name") final String name)
 	{
-		Item item = new Item(name);
+		Item item = itemFactory.buildItem(name);
 		repository.save(item);
 	}
 
 
-	@RequestMapping(value="/setTag", method=RequestMethod.GET)
-	@ResponseStatus(HttpStatus.OK)
-	public void setTag(@RequestParam("name") final String name,
-					   @RequestParam("tag") final String tag,
-					   @RequestParam("value") final String value)
-	{
-		Item item = repository.findByName(name);
-		Integer dimNo = getDimensionNumber(tag);
-
-	}
+//	@RequestMapping(value="/setTag", method=RequestMethod.GET)
+//	@ResponseStatus(HttpStatus.OK)
+//	public void setTag(@RequestParam("name") final String name,
+//					   @RequestParam("tag") final String tag,
+//					   @RequestParam("value") final String value)
+//	{
+//		Item item = repository.findByName(name);
+//		Integer dimNo = namedDimensions.getDimensionNumber(tag);
+//
+//	}
 
 	@RequestMapping(value="/near", method=RequestMethod.GET)
 	@ResponseStatus(HttpStatus.OK)
 	public ModelAndView nearPerson(@RequestParam("name") final String name)
 	{
 		Item item = repository.findByName(name);
-		List<ByteArrayWrapper> people =  getDB().getNearObjects(item.getNDKey(), 10, item.getId().toByteArray());
+		List<ByteArrayWrapper> people =  nDimsDb.getNearObjects(item.getNDKey(), 10, item.getId().toByteArray());
 		List<Item> nearBy = new ArrayList<>();
 		for (ByteArrayWrapper id : people)
 		{
@@ -84,8 +94,8 @@ public class WebController
 						   @RequestParam("direction") final int direction)
 	{
 		Item item = repository.findByName(name);
-		Integer dimNo = getDimensionNumber(dimension);
-		byte[] newKey = getDB().moveObject(dimNo, item.getNDKey(), item.getId().toByteArray(), direction);
+		Integer dimNo = namedDimensions.getDimensionNumber(dimension);
+		byte[] newKey = nDimsDb.moveObject(dimNo, item.getNDKey(), item.getId().toByteArray(), direction);
 		item.setNDKey(newKey);
 		repository.save(item);
 	}

@@ -24,10 +24,11 @@ public class Index
 
 	private final ConcurrentLinkedQueue<Long> freeBlocks = new ConcurrentLinkedQueue<Long>();
 
-	public void addItem(final byte[] key, final byte[] object)
+	public boolean addItem(final byte[] key, final byte[] object)
 	{
 		try
 		{
+			boolean added = false;
 			semaphore.acquire();
 			if (!objects.containsKey(new ByteArrayWrapper(object)))
 			{
@@ -43,7 +44,9 @@ public class Index
 				}
 				objects.put(new ByteArrayWrapper(object), item);
 				changed.add(item);
+				added = true;
 			}
+			return added;
 		}
 		catch (InterruptedException e)
 		{

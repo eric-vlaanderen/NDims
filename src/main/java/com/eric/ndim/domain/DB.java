@@ -52,11 +52,13 @@ public class DB
 	public void storeObject(final byte[] id, final byte[] object)
 	{
 		ensureObjectSize(object);
-		index.addItem(id, object);
-		NDimensionalKey key = new NDimensionalKey(id, dimensionKeySize);
-		for (int i = 0; i < dimensions; i++)
+		if (index.addItem(id, object))
 		{
-			getDimension(i).setObject(key.getDimensionalKey(i), object);
+			NDimensionalKey key = new NDimensionalKey(id, dimensionKeySize);
+			for (int i = 0; i < dimensions; i++)
+			{
+				getDimension(i).setObject(key.getDimensionalKey(i), object);
+			}
 		}
 	}
 
@@ -252,7 +254,7 @@ public class DB
 	{
 		if (object.length != objectSize)
 		{
-			throw new IllegalArgumentException("Object size wrong for given object: " + object + ", size must be " + objectSize + " bytes");
+			throw new IllegalArgumentException("Object size wrong for given object: " + object.length + ", size must be " + objectSize + " bytes");
 		}
 	}
 

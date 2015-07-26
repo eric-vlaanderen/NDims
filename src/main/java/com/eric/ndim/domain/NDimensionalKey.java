@@ -59,7 +59,8 @@ class NDimensionalKey
 		int j = 0;
 		for (int i = start; i < (start + dimensionKeySize); i++)
 		{
-			dimKey[j] = k_[i];
+			byte key = k_[i];
+			dimKey[j] = key;
 			j++;
 		}
 		return dimKey;

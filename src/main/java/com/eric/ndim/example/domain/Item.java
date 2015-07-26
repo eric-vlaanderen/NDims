@@ -1,6 +1,5 @@
 package com.eric.ndim.example.domain;
 
-import com.eric.ndim.example.DBContext;
 import com.eric.ndim.util.ByteUtil;
 import com.mongodb.BasicDBObject;
 import org.bson.types.ObjectId;
@@ -17,9 +16,9 @@ public class Item extends BasicDBObject
 		this.putAll(object.toMap());
 	}
 
-	public Item(String name)
+	public Item(final String name, final byte[] key)
 	{
-		put("ndKey", DBContext.createKey(name));
+		put("ndKey", key);
 		put("name", name);
 	}
 

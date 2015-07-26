@@ -1,5 +1,9 @@
 package com.eric.ndim.example.config;
 
+import com.eric.ndim.domain.NamedDimension;
+import com.eric.ndim.domain.NamedDimensions;
+import com.eric.ndim.domain.factory.DBFactory;
+import com.eric.ndim.domain.factory.KeyFactory;
 import com.mongodb.DB;
 import com.mongodb.Mongo;
 import com.mongodb.MongoOptions;
@@ -18,6 +22,15 @@ import java.net.UnknownHostException;
 @EnableWebMvc
 public class ExampleAppConfiguration
 {
+	private static final String DB_NAME = "lame";
+
+	public static final String RED = "red";
+	public static final String GREEN = "green";
+	public static final String BLUE = "blue";
+
+	private static final int DIMENSION_KEY_SIZE = 1;
+	private static final int DIMENSIONS = 3;
+
 	private Mongo mongo;
 
 	private FreeMarkerConfigurer configurer;
@@ -57,5 +70,21 @@ public class ExampleAppConfiguration
 		viewResolver.setPrefix("");
 		viewResolver.setSuffix(".ftl");
 		return viewResolver;
+	}
+
+	@Bean
+	public KeyFactory keyFactory() {
+		return new KeyFactory(DIMENSIONS, DIMENSION_KEY_SIZE);
+	}
+
+	@Bean
+	public com.eric.ndim.domain.DB nDimsDb() throws Exception
+	{
+		return new DBFactory().createDB(DB_NAME, DIMENSIONS, 12, DIMENSION_KEY_SIZE);
+	}
+
+	@Bean
+	public NamedDimensions namedDimensions() {
+		return new NamedDimensions(new NamedDimension(RED, 0), new NamedDimension(GREEN, 1), new NamedDimension(BLUE, 2));
 	}
 }

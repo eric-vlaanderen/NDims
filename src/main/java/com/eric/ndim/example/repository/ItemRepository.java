@@ -1,12 +1,8 @@
 package com.eric.ndim.example.repository;
 
-import com.eric.ndim.example.DBContext;
-import com.eric.ndim.example.domain.Iter;
 import com.eric.ndim.example.domain.Item;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBObject;
+import com.eric.ndim.example.domain.Iter;
+import com.mongodb.*;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -18,21 +14,24 @@ public class ItemRepository
 {
 
 	private final DBCollection dbCollection;
+	private final com.eric.ndim.domain.DB nDimsDb;
 
 	@Autowired
-	public ItemRepository(final DB db)
+	public ItemRepository(final DB db, final com.eric.ndim.domain.DB nDimsDb)
 	{
+		this.nDimsDb = nDimsDb;
 		this.dbCollection = db.getCollection("person");
+		dbCollection.ensureIndex(new BasicDBObject("name", 1), "nameIndex", true);
 	}
 	
 	public Item findById(final ObjectId id)
 	{
-		return new Item((BasicDBObject)dbCollection.findOne((id(id))));
+		return new Item((BasicDBObject) dbCollection.findOne((id(id))));
 	}
 
 	public Item findByName(final String name)
 	{
-		return new Item((BasicDBObject)dbCollection.findOne(name(name)));
+		return new Item((BasicDBObject) dbCollection.findOne(name(name)));
 	}
 
 	public Iterator<Item> findAll()
@@ -43,7 +42,12 @@ public class ItemRepository
 	public void save(final Item item)
 	{
 		dbCollection.save(item);
-		DBContext.getDB().storeObject(item.getNDKey(), item.getId().toByteArray());
+		storeObjectInNDims(findByName(item.getName()));
+	}
+
+	private void storeObjectInNDims(final Item item)
+	{
+		nDimsDb.storeObject(item.getNDKey(), item.getId().toByteArray());
 	}
 
 	public void delete(final ObjectId id)
