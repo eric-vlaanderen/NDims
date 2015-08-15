@@ -1,7 +1,9 @@
 package com.eric.ndim.domain;
 
-import com.eric.util.wrapper.ByteArrayWrapper;
 
+import com.eric.ndim.util.ByteArrayWrapper;
+
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -14,8 +16,8 @@ import java.util.concurrent.ConcurrentHashMap;
 public class Dimension 
 {
 	private final int keySize;
-	
-	private ConcurrentHashMap<ByteArrayWrapper, Items> st_ = new ConcurrentHashMap<ByteArrayWrapper, Items>();
+
+	private ConcurrentHashMap<ByteArrayWrapper, Items> storage = new ConcurrentHashMap<>();
 
 	public Dimension(final int keySize) {
 		this.keySize = keySize;
@@ -24,8 +26,8 @@ public class Dimension
 	public Set<ByteArrayWrapper> getObjects(byte[] key)
 	{
 		ensureSize(key);
-		Set<ByteArrayWrapper> toReturn = new HashSet<ByteArrayWrapper>();
-		Items found = st_.get(new ByteArrayWrapper(key));
+		Set<ByteArrayWrapper> toReturn = new HashSet<>();
+		Items found = storage.get(new ByteArrayWrapper(key));
 		if (found != null)
 		{
 			toReturn = found.getItems();
@@ -39,7 +41,7 @@ public class Dimension
 		Items items = new Items();
 		items.addItem(object);
 		ByteArrayWrapper baw = new ByteArrayWrapper(key);
-		if ((items = st_.putIfAbsent(baw, items)) != null)
+		if ((items = storage.putIfAbsent(baw, items)) != null)
 		{
 			items.addItem(object); 
 		}
@@ -56,7 +58,7 @@ public class Dimension
 	public void removeObject(byte[] key, byte[] object)
     {
 		ByteArrayWrapper baw = new ByteArrayWrapper(key);
-		Items found = st_.get(baw);
+		Items found = storage.get(baw);
 		if (found != null)
 		{
 			found.removeItem(object);
@@ -67,7 +69,7 @@ public class Dimension
 	{
 		if (key.length != keySize)
 		{
-			throw new IllegalArgumentException("Key size wrong for given key: " + key + ", size must be " + keySize + " bytes");
+			throw new IllegalArgumentException("Key size wrong for given key: " + Arrays.toString(key) + ", size must be " + keySize + " bytes");
 		}
 	}
 }

@@ -1,8 +1,11 @@
 package com.eric.ndim.example.repository;
 
+import com.eric.ndim.example.domain.DBObjectIterator;
 import com.eric.ndim.example.domain.Item;
-import com.eric.ndim.example.domain.Iter;
-import com.mongodb.*;
+import com.mongodb.BasicDBObject;
+import com.mongodb.DB;
+import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -36,7 +39,7 @@ public class ItemRepository
 
 	public Iterator<Item> findAll()
 	{
-		return new Iter<Item>(dbCollection.find().iterator());
+		return new DBObjectIterator<>(dbCollection.find().iterator());
 	}
 	
 	public void save(final Item item)

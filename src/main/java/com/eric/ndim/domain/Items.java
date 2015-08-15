@@ -1,10 +1,11 @@
 package com.eric.ndim.domain;
 
-import com.eric.util.wrapper.ByteArrayWrapper;
+import com.eric.ndim.util.ByteArrayWrapper;
 
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
+
+import static java.util.Collections.unmodifiableSet;
 
 /**
  * 
@@ -13,7 +14,7 @@ import java.util.Set;
  */
 public class Items 
 {
-	private final Set<ByteArrayWrapper> items = new HashSet<ByteArrayWrapper>();
+	private final Set<ByteArrayWrapper> items = new HashSet<>();
 	
 	public void addItem(byte[] item)
 	{
@@ -27,6 +28,6 @@ public class Items
 	
 	public Set<ByteArrayWrapper> getItems()
 	{
-		return Collections.unmodifiableSet(items);
+		return unmodifiableSet(items);
 	}
 }

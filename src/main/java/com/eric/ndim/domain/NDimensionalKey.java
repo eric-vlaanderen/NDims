@@ -2,7 +2,6 @@ package com.eric.ndim.domain;
 
 import static com.eric.ndim.util.ByteUtil.*;
 
-
 /**
  * 
  * @author eric
@@ -15,36 +14,37 @@ class NDimensionalKey
 
 	private final int dimensionKeySize;
 
-	private final byte k_[];
+	private final byte key[];
 
 	protected NDimensionalKey(final int dimensions, final int dimensionKeySize)
 	{
 		this.dimensions = dimensions;
 		this.dimensionKeySize = dimensionKeySize;
-		k_ = new byte[this.dimensions];
-		for (int i = 0; i < this.dimensions; i++)
+		int keySize = this.dimensions * this.dimensionKeySize;
+		key = new byte[keySize];
+		for (int i = 0; i < keySize; i++)
 		{
-			k_[i] = 127;
+			key[i] = 127;
 		}
 	}
 
 	protected NDimensionalKey(final NDimensionalKey other)
 	{
-		this.k_ = other.k_.clone();
+		this.key = other.key.clone();
 		this.dimensions = other.dimensions;
 		this.dimensionKeySize = other.dimensionKeySize;
 	}
 
 	protected NDimensionalKey(final byte[] id, final int dimensionKeySize)
 	{
-		this.k_ = id;
+		this.key = id;
 		this.dimensions = id.length;
 		this.dimensionKeySize = dimensionKeySize;
 	}
 
 	public byte[] getKey()
 	{
-		return k_.clone();
+		return key.clone();
 	}
 
 	public byte[] getDimensionalKey(int dimension)
@@ -59,7 +59,7 @@ class NDimensionalKey
 		int j = 0;
 		for (int i = start; i < (start + dimensionKeySize); i++)
 		{
-			byte key = k_[i];
+			byte key = this.key[i];
 			dimKey[j] = key;
 			j++;
 		}
@@ -82,7 +82,7 @@ class NDimensionalKey
 			{
 				b = 0;
 			}
-			k_[(dimension * dimensionKeySize) + i] = b;
+			key[(dimension * dimensionKeySize) + i] = b;
 			currentKey[i] = b;
 		}
 		return currentKey;
@@ -104,7 +104,7 @@ class NDimensionalKey
 			{
 				b = -128;
 			}
-			k_[(dimension * dimensionKeySize) + i] = b;
+			key[(dimension * dimensionKeySize) + i] = b;
 			currentKey[i] = b;
 		}
 		return currentKey;
@@ -112,6 +112,6 @@ class NDimensionalKey
 
 	public String toString()
 	{
-		return stringVal(k_);
+		return stringVal(key);
 	}
 }

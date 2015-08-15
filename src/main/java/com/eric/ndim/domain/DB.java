@@ -1,7 +1,7 @@
 package com.eric.ndim.domain;
 
+import com.eric.ndim.util.ByteArrayWrapper;
 import com.eric.ndim.util.ByteUtil;
-import com.eric.util.wrapper.ByteArrayWrapper;
 
 import java.util.*;
 
@@ -126,7 +126,7 @@ public class DB
 	{
 		NDimensionalKey key = new NDimensionalKey(id, dimensionKeySize);
 		List<ByteArrayWrapper> excluded = createExcludesList(exclude);
-		Map<ByteArrayWrapper, Integer> countMap = new HashMap<ByteArrayWrapper, Integer>();
+		Map<ByteArrayWrapper, Integer> countMap = new HashMap<>();
 		for (int dimNo = 0; dimNo < dimensions; dimNo++)
 		{
 			Map<ByteArrayWrapper, Integer> near = getNear(dimNo, key, totalWanted * dimensions);
@@ -152,7 +152,7 @@ public class DB
 
 	private List<ByteArrayWrapper> createExcludesList(final byte[]... excludes)
 	{
-		List<ByteArrayWrapper> toReturn = new ArrayList<ByteArrayWrapper>();
+		List<ByteArrayWrapper> toReturn = new ArrayList<>();
 		for (byte[] bytes : excludes)
 		{
 			toReturn.add(new ByteArrayWrapper(bytes));
@@ -164,7 +164,7 @@ public class DB
 	{
 		Dimension dim = nDims_.get(dimNo);
 		byte[] keyForDim = key.getDimensionalKey(dimNo);
-		Map<ByteArrayWrapper, Integer> near = new HashMap<ByteArrayWrapper, Integer>(wanted);
+		Map<ByteArrayWrapper, Integer> near = new HashMap<>(wanted);
 
 		NDimensionalKey decrementing = new NDimensionalKey(key);
 		NDimensionalKey incrementing = new NDimensionalKey(key);
@@ -203,16 +203,9 @@ public class DB
 
 	private List<ByteArrayWrapper> sortedKeys(final Map<ByteArrayWrapper, Integer> countMap, final int max)
 	{
-		List<ByteArrayWrapper> sorted = new ArrayList<ByteArrayWrapper>(max);
+		List<ByteArrayWrapper> sorted = new ArrayList<>(max);
 		sorted.addAll(countMap.keySet());
-		Collections.sort(sorted, new Comparator<Object>()
-		{
-			@Override
-			public int compare(Object o1, Object o2)
-			{
-				return countMap.get(o2).compareTo(countMap.get(o1));
-			}
-		});
+		Collections.sort(sorted, (o1, o2) -> countMap.get(o2).compareTo(countMap.get(o1)));
 		if (sorted.size() > max)
 		{
 			sorted = sorted.subList(0, max);

@@ -55,10 +55,10 @@ public class Item extends BasicDBObject
 	public String getColor()
 	{
 		byte[] key = getNDKey();
-		StringBuffer hexString = new StringBuffer();
-		for (int i = 0; i < key.length; i++)
+		StringBuilder hexString = new StringBuilder();
+		for (byte aKey : key)
 		{
-			String hex = Integer.toHexString(ByteUtil.intVal(key[i]));
+			String hex = Integer.toHexString(ByteUtil.intVal(aKey));
 			if (hex.length() == 1)
 			{
 				hexString.append('0');

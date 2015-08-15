@@ -1,6 +1,7 @@
 package com.eric.ndim.domain;
 
-import com.eric.util.wrapper.ByteArrayWrapper;
+
+import com.eric.ndim.util.ByteArrayWrapper;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -16,13 +17,13 @@ public class Index
 {
 	private Semaphore semaphore = new Semaphore(1);
 
-	private final ConcurrentHashMap<ByteArrayWrapper, PersistableItem> objects = new ConcurrentHashMap<ByteArrayWrapper, PersistableItem>();
+	private final ConcurrentHashMap<ByteArrayWrapper, PersistableItem> objects = new ConcurrentHashMap<>();
 
 	private final AtomicLong end = new AtomicLong(0L);
 
-	private final ConcurrentLinkedQueue<PersistableItem> changed = new ConcurrentLinkedQueue<PersistableItem>();
+	private final ConcurrentLinkedQueue<PersistableItem> changed = new ConcurrentLinkedQueue<>();
 
-	private final ConcurrentLinkedQueue<Long> freeBlocks = new ConcurrentLinkedQueue<Long>();
+	private final ConcurrentLinkedQueue<Long> freeBlocks = new ConcurrentLinkedQueue<>();
 
 	public boolean addItem(final byte[] key, final byte[] object)
 	{

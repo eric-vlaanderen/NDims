@@ -32,8 +32,10 @@ public class NDims
 		this.dataDirectory = dataDirectory;
 	}
 
-	public DB getDb(final String name, final int dimensions, final int objectSize, final int dimensionKeySize)
-			throws DuplicateDBException, IOException
+	public DB getDb(final String name,
+					final int dimensions,
+					final int objectSize,
+					final int dimensionKeySize) throws DuplicateDBException, IOException
 	{
 		DB db;
 		if (dbLoader.dbExists(name, dataDirectory))

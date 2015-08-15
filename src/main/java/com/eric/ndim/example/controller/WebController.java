@@ -5,7 +5,7 @@ import com.eric.ndim.domain.NamedDimensions;
 import com.eric.ndim.example.domain.Item;
 import com.eric.ndim.example.domain.ItemFactory;
 import com.eric.ndim.example.repository.ItemRepository;
-import com.eric.util.wrapper.ByteArrayWrapper;
+import com.eric.ndim.util.ByteArrayWrapper;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

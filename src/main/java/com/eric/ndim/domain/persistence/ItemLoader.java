@@ -23,7 +23,6 @@ public class ItemLoader
 		this.itemPersister = itemPersister;
 	}
 
-
 	public void loadItemsIntoMemory(final DB db, final String dataDirectory)
 	{
 		FileInputStream is = null;

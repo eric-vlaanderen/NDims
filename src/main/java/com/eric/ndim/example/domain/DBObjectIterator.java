@@ -1,8 +1,8 @@
 package com.eric.ndim.example.domain;
 
-import java.util.Iterator;
-
 import com.mongodb.DBObject;
+
+import java.util.Iterator;
 
 /**
  * 
@@ -10,11 +10,11 @@ import com.mongodb.DBObject;
  *
  * @param <T>
  */
-public class Iter<T extends DBObject> implements Iterator<T>
+public class DBObjectIterator<T extends DBObject> implements Iterator<T>
 {
 	private final Iterator<DBObject> base;
 
-	public Iter(final Iterator<DBObject> base)
+	public DBObjectIterator(final Iterator<DBObject> base)
 	{
 		this.base = base;
 	}

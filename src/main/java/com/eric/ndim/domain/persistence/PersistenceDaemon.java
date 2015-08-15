@@ -2,7 +2,6 @@ package com.eric.ndim.domain.persistence;
 
 import com.eric.ndim.domain.DB;
 
-
 /**
  * @author Eric Vlaanderen
  */
@@ -25,6 +24,7 @@ public class PersistenceDaemon implements Runnable
 	@Override
 	public void run()
 	{
+		//noinspection InfiniteLoopStatement
 		while(true)
 		{
 			itemPersister.persist(db, dataDirectory);
@@ -40,7 +40,7 @@ public class PersistenceDaemon implements Runnable
 		}
 		catch (InterruptedException e)
 		{
-			// SSsssshhhh sleeping!
+			// SSsssshhhh i'm sleeping!
 		}
 	}
 }
